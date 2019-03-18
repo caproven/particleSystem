@@ -1,4 +1,5 @@
 #include <SFML/Graphics/CircleShape.h>
+#include <SFML/Graphics/RenderWindow.h>
 
 /* Particle struct contains a sfCircleShape (maintains pos.),
  * along with vel. and accel. vectors
@@ -21,3 +22,7 @@ void Particle_destroy(Particle *particle);
 /* Updates the Particle's pos. based on its current vel.
  */
 void Particle_updatePos(Particle *particle);
+
+/* Updates the Particles pos. to point in the direction of the cursor.
+ */
+void Particle_setVelTowardsMouse(Particle *particle, sfRenderWindow *window);

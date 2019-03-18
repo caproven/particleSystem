@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -std=c99 -g
-LDLIBS = -lcsfml-graphics
+LDLIBS = -lm -lcsfml-graphics
 
 main: main.o particle.o
 

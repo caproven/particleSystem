@@ -44,9 +44,13 @@ int main(int argc, char *argv[])
     }
 
     // Call updates
-    Particle_updatePos(particle);
-    sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
-    sprintf(myText, "%d %d", mousePos.x, mousePos.y);
+    Particle_setVelTowardsMouse(particle, window);
+    //Particle_updatePos(particle);
+    //sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
+    //sprintf(myText, "%d %d", mousePos.x, mousePos.y);
+    sprintf(myText, "%.5f %.5f",
+            sfCircleShape_getPosition(particle->shape).x,
+            sfCircleShape_getPosition(particle->shape).y);
     sfText_setString(text, myText);
 
     // Handle window redrawing
