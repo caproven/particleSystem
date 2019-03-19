@@ -23,6 +23,10 @@ void Particle_destroy(Particle *particle);
  */
 void Particle_updatePos(Particle *particle);
 
-/* Updates the Particles pos. to point in the direction of the cursor.
+/* Updates the Particle's pos. to point in the direction of the cursor.
  */
 void Particle_setVelTowardsMouse(Particle *particle, sfRenderWindow *window);
+
+/* Randomizes the Particle's pos. to a random point in the given window.
+ */
+void Particle_randomizePosition(Particle *particle, sfRenderWindow *window);

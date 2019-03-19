@@ -1,4 +1,4 @@
-#include "particle.h"
+#include "particleSystem.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <SFML/Graphics.h>
@@ -10,9 +10,9 @@ int main(int argc, char *argv[])
   sfRenderWindow* window;
   sfColor bgColor = sfColor_fromRGB(71, 55, 62);
   sfFont* font;
-  sfText* text;
+  sfText* textMouse;
   sfEvent event;
-  Particle* particle;
+  ParticleSystem* psystem;
 
   // Construct window
   window = sfRenderWindow_create(mode, "Application Title", sfResize | sfClose, NULL);
@@ -20,21 +20,23 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
   sfRenderWindow_setFramerateLimit(window, 30);
 
-  // Construct particle
-  particle = Particle_create();
+  // Construct particle system
+  psystem = ParticleSystem_create();
+  ParticleSystem_setWindow(psystem, window);
 
   // Set text
   font = sfFont_createFromFile("resources/Roboto-Regular.ttf");
   if (!font)
     return EXIT_FAILURE;
-  text = sfText_create();
+  textMouse = sfText_create();
   char myText[50];
-  sprintf(myText, "%.5f %.5f",
-          sfCircleShape_getPosition(particle->shape).x,
-          sfCircleShape_getPosition(particle->shape).y);
-  sfText_setString(text, myText);
-  sfText_setFont(text, font);
-  sfText_setCharacterSize(text, 30);
+  sprintf(myText, "Mouse: %d %d",
+          sfMouse_getPositionRenderWindow(window).x,
+          sfMouse_getPositionRenderWindow(window).y);
+  sfText_setString(textMouse, myText);
+  sfText_setFont(textMouse, font);
+  sfText_setCharacterSize(textMouse, 20);
+  sfText_setPosition(textMouse, (sfVector2f) {0.f, 25.f});
 
   // Game loop
   while (sfRenderWindow_isOpen(window)) {
@@ -44,26 +46,27 @@ int main(int argc, char *argv[])
     }
 
     // Call updates
-    Particle_setVelTowardsMouse(particle, window);
-    //Particle_updatePos(particle);
-    //sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
-    //sprintf(myText, "%d %d", mousePos.x, mousePos.y);
-    sprintf(myText, "%.5f %.5f",
-            sfCircleShape_getPosition(particle->shape).x,
-            sfCircleShape_getPosition(particle->shape).y);
-    sfText_setString(text, myText);
+    // moved to window redrawing to reduce redundant iteration
+
+    sprintf(myText, "Mouse: %d %d",
+            sfMouse_getPositionRenderWindow(window).x,
+            sfMouse_getPositionRenderWindow(window).y);
+    sfText_setString(textMouse, myText);
 
     // Handle window redrawing
     sfRenderWindow_clear(window, bgColor);
-    sfRenderWindow_drawText(window, text, NULL);
-    sfRenderWindow_drawCircleShape(window, particle->shape, NULL);
+    sfRenderWindow_drawText(window, textMouse, NULL);
+    for (int i = 0; i < psystem->size; i++) {
+      Particle_updatePos(psystem->list[i]);
+      sfRenderWindow_drawCircleShape(window, psystem->list[i]->shape, NULL);
+    }
     sfRenderWindow_display(window);
   }
 
   // Cleanup
-  sfText_destroy(text);
+  sfText_destroy(textMouse);
   sfFont_destroy(font);
-  Particle_destroy(particle);
+  ParticleSystem_destroy(psystem);
   sfRenderWindow_destroy(window);
 
   return EXIT_SUCCESS;
