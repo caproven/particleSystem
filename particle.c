@@ -14,7 +14,6 @@ Particle *Particle_create(void)
   particle->vel = (sfVector2f *) malloc(sizeof(sfVector2f));
   particle->vel->x = 0.f;
   particle->vel->y = 0.f;
-  particle->accel = (sfVector2f *) malloc(sizeof(sfVector2f));
 
   // Return pointer
   return particle;
@@ -25,7 +24,6 @@ void Particle_destroy(Particle *particle)
   // Free components of the particle
   sfCircleShape_destroy(particle->shape);
   free(particle->vel);
-  free(particle->accel);
 
   // Free the particle itself
   free(particle);
@@ -36,26 +34,22 @@ void Particle_updatePos(Particle *particle)
   sfCircleShape_move(particle->shape, *(particle->vel));
 }
 
-//void Particle_setVelTowardsMouse(Particle *particle, sfRenderWindow *window)
 void Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos)
 {
   // Unit vector
-  //sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
   int mouseX = mousePos.x;
-  // int mouseX = 50;
   float particleX = sfCircleShape_getPosition(particle->shape).x;
   float diffX = mouseX - particleX;
 
   int mouseY = mousePos.y;
-  // int mouseY = 50;
   float particleY = sfCircleShape_getPosition(particle->shape).y;
   float diffY = mouseY - particleY;
 
   float denom = diffX * diffX + diffY * diffY;
 
   if (denom != 0) {
-    particle->vel->x = 2 * diffX / sqrt(denom);
-    particle->vel->y = 2 * diffY / sqrt(denom);
+    particle->vel->x = 4 * diffX / sqrt(denom);
+    particle->vel->y = 4 * diffY / sqrt(denom);
   }
 
 }
