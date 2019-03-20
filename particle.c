@@ -36,14 +36,18 @@ void Particle_updatePos(Particle *particle)
   sfCircleShape_move(particle->shape, *(particle->vel));
 }
 
-void Particle_setVelTowardsMouse(Particle *particle, sfRenderWindow *window)
+//void Particle_setVelTowardsMouse(Particle *particle, sfRenderWindow *window)
+void Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos)
 {
   // Unit vector
-  int mouseX = sfMouse_getPositionRenderWindow(window).x;
+  //sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
+  int mouseX = mousePos.x;
+  // int mouseX = 50;
   float particleX = sfCircleShape_getPosition(particle->shape).x;
   float diffX = mouseX - particleX;
 
-  int mouseY = sfMouse_getPositionRenderWindow(window).y;
+  int mouseY = mousePos.y;
+  // int mouseY = 50;
   float particleY = sfCircleShape_getPosition(particle->shape).y;
   float diffY = mouseY - particleY;
 

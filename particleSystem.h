@@ -1,7 +1,7 @@
 #include "particle.h"
 #include <stdbool.h>
 
-#define PSYSTEM_INIT_CAP 5
+#define PSYSTEM_INIT_CAP 500
 
 typedef struct {
   sfRenderWindow* window;
