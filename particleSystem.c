@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-static void printStatus(ParticleSystem *system)
+static void printStatus(const ParticleSystem *system)
 {
   printf("[PSystem] ParticleSystem has random:%d decay:%d size:%d capacity:%d\n",
       system->randomize, system->decay, system->size, system->capacity);
@@ -19,7 +19,7 @@ ParticleSystem *ParticleSystem_create()
   system->decay = 0;
   system->size = 0;
   system->capacity = PSYSTEM_INIT_CAP;
-  system->list = (Particle *) malloc(PSYSTEM_INIT_CAP * sizeof(Particle *));
+  system->list = (Particle **) malloc(PSYSTEM_INIT_CAP * sizeof(Particle *));
 
   printf("[PSystem] Constructing new ParticleSystem..\n");
   printStatus(system);
@@ -45,13 +45,20 @@ void ParticleSystem_destroy(ParticleSystem *system)
 
 void ParticleSystem_spawnParticles(ParticleSystem *system, unsigned short n)
 {
+  // Ensure adequate capacity
+  if (system->size + n > system->capacity) {
+    system->capacity *= 2;
+    system->list = (Particle **) realloc(system->list, system->capacity * sizeof(Particle *));
+  }
+
+  // Construct Particles
   for (int i = 0; i < n; i++) {
     system->list[system->size + i] = Particle_create();
     if (system->randomize) { // TODO add in check that system->window has been set
       Particle_randomizePosition(system->list[system->size + i], system->window);
     }
-    system->size++;
   }
+  system->size += n; // done after loop so accessing based off size of system works
   printf("[PSystem] Spawning particles..\n");
   printStatus(system);
 }

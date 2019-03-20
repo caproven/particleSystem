@@ -7,7 +7,7 @@ typedef struct {
   sfRenderWindow* window;
   bool randomize;
   unsigned int decay, size, capacity;
-  Particle *list[]; // TODO replace with linked list (head and tail ptr)
+  Particle **list; // TODO replace with linked list (head and tail ptr)
 } ParticleSystem;
 
 /* Constructs a new ParticleSystem on the heap. Default flags are randomize = false,

@@ -11,3 +11,4 @@ particleSystem.o: particle.h
 clean:
 	rm -f *.o
 	rm -f main
+	rm -f core
