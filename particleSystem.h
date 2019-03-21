@@ -1,7 +1,7 @@
 #include "particle.h"
 #include <stdbool.h>
 
-#define PSYSTEM_INIT_CAP 500
+#define PSYSTEM_INIT_CAP 5
 
 typedef struct {
   sfRenderWindow* window;
@@ -24,3 +24,5 @@ void ParticleSystem_setWindow(ParticleSystem *system, sfRenderWindow *window);
 void ParticleSystem_setDecay(ParticleSystem *system, unsigned int decay);
 
 void ParticleSystem_setRandomizeLocation(ParticleSystem *system, bool randomize);
+
+void ParticleSystem_updateSystem(ParticleSystem *system);

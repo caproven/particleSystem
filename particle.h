@@ -24,7 +24,7 @@ void Particle_updatePos(Particle *particle);
 
 /* Updates the Particle's pos. to point in the direction of the cursor.
  */
-void Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos);
+int Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos);
 
 /* Randomizes the Particle's pos. to a random point in the given window.
  */

@@ -34,7 +34,7 @@ void Particle_updatePos(Particle *particle)
   sfCircleShape_move(particle->shape, *(particle->vel));
 }
 
-void Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos)
+int Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos)
 {
   // Unit vector
   int mouseX = mousePos.x;
@@ -47,9 +47,14 @@ void Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos)
 
   float denom = diffX * diffX + diffY * diffY;
 
-  if (denom != 0) {
-    particle->vel->x = 4 * diffX / sqrt(denom);
-    particle->vel->y = 4 * diffY / sqrt(denom);
+  //if (denom != 0) {
+  if (denom >= 10) {
+    particle->vel->x = 2 * diffX / sqrt(denom);
+    particle->vel->y = 2 * diffY / sqrt(denom);
+    return 1;
+  } else {
+    Particle_destroy(particle);
+    return 0;
   }
 
 }

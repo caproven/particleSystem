@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
   psystem = ParticleSystem_create();
   ParticleSystem_setWindow(psystem, window);
   ParticleSystem_setRandomizeLocation(psystem, 1);
-  ParticleSystem_spawnParticles(psystem, 500);
+  ParticleSystem_spawnParticles(psystem, 1);
 
   // Game loop
   while (sfRenderWindow_isOpen(window)) {
@@ -33,19 +33,21 @@ int main(int argc, char *argv[])
           event.type == sfEvtKeyReleased)
         sfRenderWindow_close(window);
       else if (event.type == sfEvtMouseWheelScrolled)
-        ParticleSystem_spawnParticles(psystem, 500);
+        ParticleSystem_spawnParticles(psystem, 5);
     }
 
     // Clear RenderWindow before redrawing elements
     sfRenderWindow_clear(window, bgColor);
 
     // Update each Particle in the ParticleSystem
-    sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
+    ParticleSystem_updateSystem(psystem);
+    // sfVector2i mousePos = sfMouse_getPositionRenderWindow(window);
     for (int i = 0; i < psystem->size; i++) {
-      Particle_setVelTowardsMouse(psystem->list[i], mousePos);
-      //Particle_updatePos(psystem->list[i]);
-      sfCircleShape_move(psystem->list[i]->shape, *(psystem->list[i]->vel));
-      sfRenderWindow_drawCircleShape(window, psystem->list[i]->shape, NULL);
+    //   Particle_setVelTowardsMouse(psystem->list[i], mousePos);
+    //   sfCircleShape_move(psystem->list[i]->shape, *(psystem->list[i]->vel));
+      if (psystem->list[i]) {
+        sfRenderWindow_drawCircleShape(window, psystem->list[i]->shape, NULL);
+      }
     }
     sfRenderWindow_display(window);
   }

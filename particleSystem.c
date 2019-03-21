@@ -77,3 +77,17 @@ void ParticleSystem_setRandomizeLocation(ParticleSystem *system, bool randomize)
 {
   system->randomize = randomize;
 }
+
+void ParticleSystem_updateSystem(ParticleSystem *system)
+{
+  sfVector2i mousePos = sfMouse_getPositionRenderWindow(system->window);
+  for (int i = 0; i < system->size; i++) {
+    if (system->list[i]) { // if ptr isn't NULL
+      if (Particle_setVelTowardsMouse(system->list[i], mousePos)) { // if particle wasnt freed
+        sfCircleShape_move(system->list[i]->shape, *(system->list[i]->vel));
+      } else { // particle was freed, set ptr = NULL
+        system->list[i] = NULL;
+      }
+    }
+  }
+}
