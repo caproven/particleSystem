@@ -53,7 +53,6 @@ int Particle_setVelTowardsMouse(Particle *particle, sfVector2i mousePos)
     particle->vel->y = 2 * diffY / sqrt(denom);
     return 1;
   } else {
-    Particle_destroy(particle);
     return 0;
   }
 

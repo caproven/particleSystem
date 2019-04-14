@@ -34,7 +34,9 @@ void ParticleSystem_destroy(ParticleSystem *system)
 
   // Free components
   for (int i = 0; i < system->size; i++) {
-    Particle_destroy(system->list[i]);
+    if (system->list[i]) {
+      Particle_destroy(system->list[i]);
+    }
   }
   free(system->list);
   // window field will be freed in main
@@ -83,9 +85,10 @@ void ParticleSystem_updateSystem(ParticleSystem *system)
   sfVector2i mousePos = sfMouse_getPositionRenderWindow(system->window);
   for (int i = 0; i < system->size; i++) {
     if (system->list[i]) { // if ptr isn't NULL
-      if (Particle_setVelTowardsMouse(system->list[i], mousePos)) { // if particle wasnt freed
+      if (Particle_setVelTowardsMouse(system->list[i], mousePos)) { // if dist <= 10
         sfCircleShape_move(system->list[i]->shape, *(system->list[i]->vel));
-      } else { // particle was freed, set ptr = NULL
+      } else { // consumed by cursor, free particle
+        Particle_destroy(system->list[i]);
         system->list[i] = NULL;
       }
     }
